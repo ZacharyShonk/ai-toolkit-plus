@@ -124,6 +124,74 @@ npm run build_and_start
 
 You can now access the UI at `http://localhost:8675` or `http://<your-ip>:8675` if you are running it on a server.
 
+Set the password via the `AI_TOOLKIT_AUTH` environment variable. For example:
+```bash
+AI_TOOLKIT_AUTH=super_secure_password podman compose up
+```
+(If unset, the default password is `password`.)
+
+## Running with Podman or Docker
+
+The container build now uses the local repo as its source and keeps runtime state mounted on the host.
+
+- `datasets/`, `output/`, and `config/` stay mounted from the repo root
+- the SQLite database is created at `state/aitk_db.db`
+- the container still runs `npm run update_db` on startup so first-run DB creation works
+
+### Podman
+
+From the repo root:
+
+```bash
+mkdir -p state datasets output config ~/.cache/huggingface/hub
+podman compose build
+podman compose up
+```
+
+Run detached:
+
+```bash
+podman compose up -d
+```
+
+Watch logs:
+
+```bash
+podman compose logs -f ai-toolkit
+```
+
+Stop the stack:
+
+```bash
+podman compose down
+```
+
+Force a clean rebuild:
+
+```bash
+podman compose build --no-cache
+podman compose up
+```
+
+Quick checks:
+
+```bash
+ls -l state/aitk_db.db
+curl -I http://127.0.0.1:8675
+```
+
+Open the UI at `http://127.0.0.1:8675`.
+
+### Docker
+
+If you prefer Docker instead of Podman, the equivalent commands are:
+
+```bash
+mkdir -p state datasets output config ~/.cache/huggingface/hub
+docker compose build
+docker compose up
+```
+
 ## Securing the UI
 
 If you are hosting the UI on a cloud provider or any network that is not secure, I highly recommend securing it with an auth token. 
@@ -536,4 +604,3 @@ _Last updated: 2026-03-31 18:10 UTC_
 </p>
 
 ---
-

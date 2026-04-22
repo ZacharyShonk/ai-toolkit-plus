@@ -1,14 +1,15 @@
-version: "3.8"
-
 services:
   ai-toolkit:
-    image: ostris/aitoolkit:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: ai-toolkit-local:latest
     restart: unless-stopped
     ports:
       - "8675:8675"
     volumes:
       - ~/.cache/huggingface/hub:/root/.cache/huggingface/hub
-      - ./aitk_db.db:/app/ai-toolkit/aitk_db.db
+      - ./state:/app/ai-toolkit/state
       - ./datasets:/app/ai-toolkit/datasets
       - ./output:/app/ai-toolkit/output
       - ./config:/app/ai-toolkit/config

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e  # Exit the script if any statement returns a non-true return value
+set -euo pipefail
 
 # ref https://github.com/runpod/containers/blob/main/container-template/start.sh
 
@@ -10,7 +10,7 @@ set -e  # Exit the script if any statement returns a non-true return value
 
 # Setup ssh
 setup_ssh() {
-    if [[ $PUBLIC_KEY ]]; then
+    if [[ ${PUBLIC_KEY:-} ]]; then
         echo "Setting up SSH..."
         mkdir -p ~/.ssh
         echo "$PUBLIC_KEY" >> ~/.ssh/authorized_keys
@@ -66,5 +66,15 @@ echo "Pod Started"
 
 setup_ssh
 export_env_vars
+mkdir -p /app/ai-toolkit/state
+
+# Keep the SQLite file on a mounted directory so first-run DB creation works.
+if [ ! -L /app/ai-toolkit/aitk_db.db ] && [ -e /app/ai-toolkit/aitk_db.db ]; then
+    rm -f /app/ai-toolkit/aitk_db.db
+fi
+ln -sfn /app/ai-toolkit/state/aitk_db.db /app/ai-toolkit/aitk_db.db
+
 echo "Starting AI Toolkit UI..."
-cd /app/ai-toolkit/ui && npm run start 
+cd /app/ai-toolkit/ui
+npm run update_db
+npm run start

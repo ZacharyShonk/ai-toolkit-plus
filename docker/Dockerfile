@@ -34,45 +34,36 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install nodejs
 WORKDIR /tmp
-RUN curl -sL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh && \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt-get update && \
-    apt-get install -y nodejs && \
+    apt-get install --no-install-recommends -y nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-
-# Set aliases for python and pip
-RUN ln -s /usr/bin/python3 /usr/bin/python
-
-# install pytorch before cache bust to avoid redownloading pytorch
-RUN pip install --no-cache-dir torch==2.9.1 torchvision==0.24.1 torchaudio==2.9.1 --index-url https://download.pytorch.org/whl/cu128 --break-system-packages
-
-# Fix cache busting by moving CACHEBUST to right before git clone
-ARG CACHEBUST=1234
-ARG GIT_COMMIT=main
-RUN echo "Cache bust: ${CACHEBUST}" && \
-    git clone https://github.com/ostris/ai-toolkit.git && \
-    cd ai-toolkit && \
-    git checkout ${GIT_COMMIT}
-
 WORKDIR /app/ai-toolkit
 
-# copy requirements.txt to leverage docker cache
-COPY requirements.txt /app/ai-toolkit/requirements.txt
+# Set aliases for python and pip
+RUN ln -sf /usr/bin/python3 /usr/bin/python
 
-# Install Python dependencies
+# Install heavyweight Python deps before copying source so rebuilds stay cached.
+RUN pip install --no-cache-dir torch==2.9.1 torchvision==0.24.1 torchaudio==2.9.1 --index-url https://download.pytorch.org/whl/cu128 --break-system-packages
+
+COPY requirements.txt requirements_base.txt ./
 RUN pip install --no-cache-dir --break-system-packages -r requirements.txt && \
     pip install setuptools==69.5.1 --no-cache-dir --break-system-packages
 
-# Build UI
+COPY ui/package.json ui/package-lock.json ./ui/
 WORKDIR /app/ai-toolkit/ui
-RUN npm install && \
-    npm run build && \
-    npm run update_db
+RUN npm ci
+
+WORKDIR /app/ai-toolkit
+COPY . .
+
+WORKDIR /app/ai-toolkit/ui
+RUN npm run update_db && \
+    npm run build
 
 # Expose port (assuming the application runs on port 3000)
 EXPOSE 8675
