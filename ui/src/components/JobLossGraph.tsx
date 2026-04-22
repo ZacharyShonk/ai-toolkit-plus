@@ -306,9 +306,9 @@ export default function JobLossGraph({ job }: Props) {
   }, [clipOutliers, chartData, activeKeys, showSmoothed]);
 
   return (
-    <div className="bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-gray-800 flex flex-col">
-      <div className="bg-gray-800 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-800 bg-gray-900 shadow-lg">
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-gray-800 px-4 py-3">
+        <div className="flex min-w-0 items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-blue-400" />
           <h2 className="text-gray-100 text-sm font-medium">Loss graph</h2>
           <span className="text-xs text-gray-400">

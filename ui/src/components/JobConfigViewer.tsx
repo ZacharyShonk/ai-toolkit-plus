@@ -42,9 +42,9 @@ export default function JobConfigViewer({ job }: Props) {
     }
   }, [job]);
   return (
-    <>
+    <div className="min-h-[70vh]">
       <Editor
-        height="100%"
+        height="70vh"
         width="100%"
         defaultLanguage="yaml"
         value={editorValue}
@@ -56,6 +56,6 @@ export default function JobConfigViewer({ job }: Props) {
           readOnly: true,
         }}
       />
-    </>
+    </div>
   );
 }

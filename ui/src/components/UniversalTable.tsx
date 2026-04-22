@@ -28,7 +28,7 @@ export default function UniversalTable({
   onRefresh = () => {},
 }: TableProps) {
   return (
-    <div className="w-full bg-gray-900 rounded-md shadow-md">
+    <div className="w-full overflow-hidden rounded-md bg-gray-900 shadow-md">
       {isLoading ? (
         <div className="p-4 flex justify-center">
           <Loading />
@@ -45,11 +45,11 @@ export default function UniversalTable({
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-300">
+          <table className="min-w-full text-left text-sm text-gray-300">
             <thead className={classNames('text-xs uppercase bg-gray-800', theadClassName)}>
               <tr>
                 {columns.map(column => (
-                  <th key={column.key} className="px-3 py-2">
+                  <th key={column.key} className="whitespace-nowrap px-3 py-2">
                     {column.title}
                   </th>
                 ))}
@@ -63,7 +63,7 @@ export default function UniversalTable({
                 return (
                   <tr key={index} className={`${rowClass} border-b border-gray-700 hover:bg-gray-700`}>
                     {columns.map(column => (
-                      <td key={column.key} className={classNames('px-3 py-2', column.className)}>
+                      <td key={column.key} className={classNames('px-3 py-2 align-top', column.className)}>
                         {column.render ? column.render(row) : row[column.key]}
                       </td>
                     ))}
