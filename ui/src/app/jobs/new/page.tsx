@@ -191,32 +191,35 @@ export default function TrainingForm() {
     <>
       <TopBar>
         <div>
-          <Button className="px-2 text-gray-500 dark:text-gray-300" onClick={() => history.back()}>
+          <Button className="text-gray-500 dark:text-gray-300 px-3 mt-1" onClick={() => history.back()}>
             <FaChevronLeft />
           </Button>
         </div>
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg">{runId ? 'Edit Training Job' : 'New Training Job'}</h1>
+        <div>
+          <h1 className="text-lg">{runId ? 'Edit Training Job' : 'New Training Job'}</h1>
         </div>
+        <div className="flex-1"></div>
         {showAdvancedView && (
           <>
-            <div className="w-full sm:w-auto sm:min-w-44">
+            <div>
               <SelectInput
                 value={`${gpuIDs}`}
                 onChange={value => setGpuIDs(value)}
                 options={gpuList.map((gpu: any) => ({ value: `${gpu.index}`, label: `GPU #${gpu.index}` }))}
               />
             </div>
-            <div className="w-full sm:w-auto">
-              <Button className="w-full rounded-md bg-gray-800 px-3 py-2 text-sm text-gray-200 sm:w-auto" onClick={handleImportConfig}>
+            <div className="mx-4 bg-gray-200 dark:bg-gray-800 w-1 h-6"></div>
+            <div>
+              <Button className="text-gray-200 bg-gray-800 px-3 py-1 rounded-md" onClick={handleImportConfig}>
                 Import Config
               </Button>
             </div>
+            <div className="mx-4 bg-gray-200 dark:bg-gray-800 w-1 h-6"></div>
           </>
         )}
         {!showAdvancedView && (
           <>
-            <div className="w-full sm:w-auto sm:min-w-52">
+            <div>
               <SelectInput
                 value={`${jobConfig?.config.process[0].type}`}
                 onChange={value => {
@@ -243,20 +246,21 @@ export default function TrainingForm() {
                 options={jobTypeOptions}
               />
             </div>
+            <div className="mx-4 bg-gray-200 dark:bg-gray-800 w-1 h-6"></div>
           </>
         )}
 
-        <div className="w-full sm:w-auto">
+        <div className="pr-2">
           <Button
-            className="w-full rounded-md bg-gray-800 px-3 py-2 text-sm text-gray-200 sm:w-auto"
+            className="text-gray-200 bg-gray-800 px-3 py-1 rounded-md"
             onClick={() => setShowAdvancedView(!showAdvancedView)}
           >
             {showAdvancedView ? 'Show Simple' : 'Show Advanced'}
           </Button>
         </div>
-        <div className="w-full sm:w-auto">
+        <div>
           <Button
-            className="w-full rounded-md bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-700 sm:w-auto"
+            className="text-white bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md"
             onClick={() => saveJob()}
             disabled={status === 'saving'}
           >
@@ -274,7 +278,7 @@ export default function TrainingForm() {
       />
 
       {showAdvancedView ? (
-        <div className="min-h-0 flex-1 overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
+        <div className="pt-[48px] absolute top-0 left-0 w-full h-full overflow-auto">
           <AdvancedJob
             jobConfig={jobConfig}
             setJobConfig={setJobConfig}

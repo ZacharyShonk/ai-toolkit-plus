@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import AppShell from '@/components/AppShell';
+import Sidebar from '@/components/Sidebar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import ConfirmModal from '@/components/ConfirmModal';
 import { Suspense } from 'react';
@@ -43,11 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: `window.server_platform = "${platform}";` }} />
         <ThemeProvider>
           <AuthWrapper authRequired={authRequired}>
-            <AppShell>
-              <div className="flex min-h-screen flex-1 flex-col overflow-hidden">
+            <div className="flex h-screen bg-gray-950">
+              <Sidebar />
+              <main className="flex-1 overflow-auto bg-gray-950 text-gray-100 relative">
                 <Suspense>{children}</Suspense>
-              </div>
-            </AppShell>
+              </main>
+            </div>
           </AuthWrapper>
         </ThemeProvider>
         <ConfirmModal />

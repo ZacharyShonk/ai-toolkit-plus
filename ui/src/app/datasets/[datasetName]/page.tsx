@@ -102,20 +102,21 @@ export default function DatasetPage({ params }: { params: { datasetName: string 
       {/* Fixed top bar */}
       <TopBar>
         <div>
-          <Button className="px-2 text-gray-500 dark:text-gray-300" onClick={() => history.back()}>
+          <Button className="text-gray-500 dark:text-gray-300 px-3 mt-1" onClick={() => history.back()}>
             <FaChevronLeft />
           </Button>
         </div>
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg">Dataset: {datasetName}</h1>
+        <div>
+          <h1 className="text-lg">Dataset: {datasetName}</h1>
         </div>
-        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
+        <div className="flex-1"></div>
+        <div>
           <AutoCaptionButton
             datasetPath={`${pathJoin(settings.DATASETS_FOLDER, datasetName)}`}
             setIsAutoCaptioning={setIsAutoCaptioning}
           />
           <Button
-            className="rounded-md bg-slate-600 px-3 py-2 text-sm text-white"
+            className="text-white bg-slate-600 px-3 py-1 rounded-md"
             onClick={() => openImagesModal(datasetName, () => refreshImageList(datasetName))}
           >
             Add Images

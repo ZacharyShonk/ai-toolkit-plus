@@ -35,9 +35,10 @@ export default function Settings() {
   return (
     <>
       <TopBar>
-        <div className="min-w-0 flex-1">
+        <div>
           <h1 className="text-lg">Settings</h1>
         </div>
+        <div className="flex-1"></div>
       </TopBar>
       <MainContent>
         <form onSubmit={handleSubmit} className="space-y-6">

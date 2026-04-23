@@ -22,6 +22,7 @@ interface Page {
   icon: React.ComponentType<{ className?: string }>;
   component: React.ComponentType<{ job: Job }>;
   menuItem?: React.ComponentType<{ job?: Job | null }> | null;
+  mainCss?: string;
   jobTypes?: string[]; // if specified, only show this page for these job types
 }
 
@@ -31,6 +32,7 @@ const pages: Page[] = [
     value: 'overview',
     icon: MdDashboard,
     component: JobOverview,
+    mainCss: 'pt-24',
   },
   {
     name: 'Samples',
@@ -38,6 +40,7 @@ const pages: Page[] = [
     icon: MdImage,
     component: SampleImages,
     menuItem: SampleImagesMenu,
+    mainCss: 'pt-24',
     jobTypes: ['train'],
   },
   {
@@ -45,6 +48,7 @@ const pages: Page[] = [
     value: 'loss_log',
     icon: MdShowChart,
     component: JobLossGraph,
+    mainCss: 'pt-24',
     jobTypes: ['train'],
   },
   {
@@ -52,6 +56,7 @@ const pages: Page[] = [
     value: 'config',
     icon: MdCode,
     component: JobConfigViewer,
+    mainCss: 'pt-[80px] px-0 pb-0',
   },
 ];
 
@@ -75,13 +80,14 @@ export default function JobPage({ params }: { params: { jobID: string } }) {
       {/* Fixed top bar */}
       <TopBar>
         <div>
-          <Button className="px-2 text-gray-500 dark:text-gray-300" onClick={() => redirect('/jobs')}>
+          <Button className="text-gray-500 dark:text-gray-300 px-3 mt-1" onClick={() => redirect('/jobs')}>
             <FaChevronLeft />
           </Button>
         </div>
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg">{title}</h1>
+        <div>
+          <h1 className="text-lg">{title}</h1>
         </div>
+        <div className="flex-1"></div>
         {job && (
           <JobActionBar
             job={job}
@@ -94,31 +100,7 @@ export default function JobPage({ params }: { params: { jobID: string } }) {
           />
         )}
       </TopBar>
-      <div className="sticky top-14 z-20 border-b border-gray-800 bg-gray-800/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-gray-800/85 sm:px-4">
-        <div className="flex flex-wrap items-center gap-2 overflow-x-auto">
-          {pages.map(page => {
-            if (page.jobTypes && !page.jobTypes.includes(jobType)) {
-              return null;
-            }
-            return (
-              <Button
-                key={page.value}
-                onClick={() => setPageKey(page.value)}
-                className={`inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-md px-3 text-sm ${page.value === pageKey ? 'bg-gray-300 text-white dark:bg-gray-700' : 'bg-transparent text-gray-200 hover:bg-gray-700'}`}
-              >
-                <page.icon className="text-sm" />
-                {page.name}
-              </Button>
-            );
-          })}
-          {page?.menuItem && (
-            <div className="ml-auto w-full sm:w-auto">
-              <page.menuItem job={job} />
-            </div>
-          )}
-        </div>
-      </div>
-      <MainContent className={pageKey === 'config' ? 'px-0 py-0' : undefined}>
+      <MainContent className={pages.find(page => page.value === pageKey)?.mainCss}>
         {status === 'loading' && job == null && <p>Loading...</p>}
         {status === 'error' && job == null && <p>Error fetching job</p>}
         {job && (
@@ -130,6 +112,29 @@ export default function JobPage({ params }: { params: { jobID: string } }) {
           </>
         )}
       </MainContent>
+      <div className="bg-gray-800 absolute top-12 left-0 w-full h-8 flex items-center px-2 text-sm">
+        {pages.map(page => {
+          if (page.jobTypes && !page.jobTypes.includes(jobType)) {
+            return null;
+          }
+          return (
+            <Button
+              key={page.value}
+              onClick={() => setPageKey(page.value)}
+              className={`px-4 py-1 h-8 flex items-center gap-1.5 ${page.value === pageKey ? 'bg-gray-300 dark:bg-gray-700 text-white' : ''}`}
+            >
+              <page.icon className="text-sm" />
+              {page.name}
+            </Button>
+          );
+        })}
+        {page?.menuItem && (
+          <>
+            <div className="flex-grow"></div>
+            <page.menuItem job={job} />
+          </>
+        )}
+      </div>
     </>
   );
 }

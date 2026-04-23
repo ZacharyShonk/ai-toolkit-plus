@@ -1,19 +1,10 @@
-'use client';
-
 import Link from 'next/link';
 import { Home, Settings, BrainCircuit, Images, Plus } from 'lucide-react';
 import { FaXTwitter, FaDiscord, FaYoutube } from 'react-icons/fa6';
-import classNames from 'classnames';
-import { usePathname } from 'next/navigation';
 import ThemeToggle from './ThemeToggle';
 import ThemeLogo from './ThemeLogo';
 
-interface SidebarProps {
-  onNavigate?: () => void;
-}
-
-const Sidebar = ({ onNavigate }: SidebarProps) => {
-  const pathname = usePathname();
+const Sidebar = () => {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'New Job', href: '/jobs/new', icon: Plus },
@@ -27,7 +18,7 @@ const Sidebar = ({ onNavigate }: SidebarProps) => {
   const socialIconClass = 'w-5 h-5 text-gray-400 hover:text-white';
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col bg-gray-900 text-gray-100">
+    <div className="flex flex-col w-59 bg-gray-900 text-gray-100">
       <div className="px-4 py-3">
         <h1 className="text-l">
           <ThemeLogo />
@@ -35,19 +26,13 @@ const Sidebar = ({ onNavigate }: SidebarProps) => {
           <span className="ml-2 uppercase text-gray-300">AI-Toolkit</span>
         </h1>
       </div>
-      <nav className="flex-1 overflow-y-auto">
+      <nav className="flex-1">
         <ul className="px-2 py-4 space-y-2">
           {navigation.map(item => (
             <li key={item.name}>
               <Link
                 href={item.href}
-                onClick={onNavigate}
-                className={classNames(
-                  'flex items-center rounded-lg px-4 py-3 text-sm transition-colors',
-                  pathname === item.href
-                    ? 'bg-gray-800 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-                )}
+                className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors"
               >
                 <item.icon className="w-5 h-5 mr-3" />
                 {item.name}
@@ -56,7 +41,12 @@ const Sidebar = ({ onNavigate }: SidebarProps) => {
           ))}
         </ul>
       </nav>
-      <a href="https://ostris.com/support" target="_blank" rel="noreferrer" className="flex items-center space-x-2 px-4 py-3">
+      <a
+        href="https://ostris.com/support"
+        target="_blank"
+        rel="noreferrer"
+        className="flex items-center space-x-2 px-4 py-3"
+      >
         <div className="min-w-[26px] min-h-[26px]">
           <svg height="24" version="1.1" width="24" xmlns="http://www.w3.org/2000/svg">
             <g transform="translate(0 -1028.4)">
@@ -71,7 +61,7 @@ const Sidebar = ({ onNavigate }: SidebarProps) => {
       </a>
 
       {/* Social links grid */}
-      <div className="px-2 py-2 border-t border-gray-800">
+      <div className="px-1 py-1 border-t border-gray-800">
         <div className="grid grid-cols-4 gap-4">
           <a href="https://discord.gg/VXmU2f5WEU" target="_blank" rel="noreferrer" className={socialsBoxClass}>
             <FaDiscord className={socialIconClass} />

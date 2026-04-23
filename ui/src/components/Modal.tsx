@@ -68,7 +68,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         {/* Modal panel */}
         <div
-          className={`relative mx-3 my-4 flex max-h-[calc(100vh-2rem)] w-full flex-col ${sizeClasses[size]} rounded-lg border border-gray-700 bg-gray-800 shadow-xl transition-all`}
+          className={`relative mx-auto w-full ${sizeClasses[size]} rounded-lg bg-gray-800 border border-gray-700 shadow-xl transition-all`}
           onClick={e => e.stopPropagation()}
         >
           {/* Modal header */}
@@ -102,7 +102,7 @@ export const Modal: React.FC<ModalProps> = ({
           )}
 
           {/* Modal content */}
-          <div className="overflow-y-auto px-4 py-4 sm:px-6">{children}</div>
+          <div className="px-6 py-4">{children}</div>
         </div>
       </div>
     </Fragment>

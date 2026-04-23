@@ -44,7 +44,7 @@ export default function JobsTable({ onlyActive = false, job_type = null }: JobsT
           );
         }
         return (
-          <Link href={`/jobs/${row.id}`} className="font-medium text-gray-100 hover:text-white">
+          <Link href={`/jobs/${row.id}`} className="font-medium whitespace-nowrap">
             {['running', 'stopping'].includes(row.status) ? (
               <CgSpinner className="inline animate-spin mr-2 text-blue-400" />
             ) : null}
@@ -160,38 +160,38 @@ export default function JobsTable({ onlyActive = false, job_type = null }: JobsT
             <div key={gpuKey} className="mb-6">
               <div
                 className={classNames(
-                  'text-md flex flex-wrap items-center gap-2 rounded-t-lg px-4 py-2',
+                  'text-md flex px-4 py-1 rounded-t-lg',
                   { 'bg-green-600 dark:bg-green-900': queue?.is_running },
                   { 'bg-red-600 dark:bg-red-900': !queue?.is_running },
                 )}
               >
-                <div className="flex min-w-0 flex-1 items-center space-x-2 py-1">
-                  <h2 className="truncate font-semibold text-white">{jobsDict[gpuKey].name}</h2>
+                <div className="flex items-center space-x-2 flex-1 py-2">
+                  <h2 className="font-semibold text-white">{jobsDict[gpuKey].name}</h2>
                   <span className="px-2 py-0.5 bg-gray-700 rounded-full text-xs text-gray-300"># {queue?.gpu_ids}</span>
                 </div>
-                <div className="flex w-full flex-wrap items-center gap-2 text-sm italic text-gray-300 sm:w-auto sm:justify-end">
+                <div className="text-sm text-gray-300 italic flex items-center">
                   {queue?.is_running ? (
                     <>
-                      <span className="text-green-100 dark:text-green-400">Queue Running</span>
+                      <span className="text-green-100 dark:text-green-400 mr-2">Queue Running</span>
                       <button
                         onClick={async () => {
                           await stopQueue(queue.gpu_ids as string);
                           refresh();
                         }}
-                        className="rounded bg-red-600 px-2 py-1 text-xs text-white hover:bg-red-700"
+                        className="ml-4 text-xs text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
                       >
                         STOP
                       </button>
                     </>
-                    ) : (
+                  ) : (
                     <>
-                      <span className="text-red-100 dark:text-red-400">Queue Stopped</span>
+                      <span className="text-red-100 dark:text-red-400 mr-2">Queue Stopped</span>
                       <button
                         onClick={async () => {
                           await startQueue(gpuKey);
                           refresh();
                         }}
-                        className="rounded bg-green-600 px-2 py-1 text-xs text-white hover:bg-green-700"
+                        className="ml-4 text-xs text-white bg-green-600 hover:bg-green-700 px-2 py-1 rounded"
                       >
                         START
                       </button>
