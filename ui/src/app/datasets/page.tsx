@@ -113,13 +113,12 @@ export default function Datasets() {
   return (
     <>
       <TopBar>
-        <div>
+        <div className="min-w-0 flex-1">
           <h1 className="text-lg">Datasets</h1>
         </div>
-        <div className="flex-1"></div>
-        <div>
+        <div className="w-full sm:w-auto">
           <Button
-            className="text-white bg-slate-600 px-3 py-1 rounded-md hover:bg-slate-500 transition-colors"
+            className="w-full rounded-md bg-slate-600 px-3 py-2 text-sm text-white transition-colors hover:bg-slate-500 sm:w-auto"
             onClick={() => openNewDatasetModal()}
           >
             New Dataset

@@ -30,7 +30,7 @@ export default function JobActionBar({
   if (!afterDelete) afterDelete = onRefresh;
 
   return (
-    <div className={`${className}`}>
+    <div className={`flex flex-wrap items-center justify-end gap-2 ${className}`}>
       {canStart && (
         <Button
           onClick={async () => {
@@ -42,7 +42,7 @@ export default function JobActionBar({
             }
             if (onRefresh) onRefresh();
           }}
-          className={`ml-2 opacity-100`}
+          className={`opacity-100`}
         >
           <Play />
         </Button>
@@ -54,7 +54,7 @@ export default function JobActionBar({
             await markJobAsStopped(job.id);
             if (onRefresh) onRefresh();
           }}
-          className={`ml-2 opacity-100`}
+          className={`opacity-100`}
         >
           <X />
         </Button>
@@ -74,18 +74,18 @@ export default function JobActionBar({
               },
             });
           }}
-          className={`ml-2 opacity-100`}
+          className={`opacity-100`}
         >
           <Pause />
         </Button>
       )}
       {!hideView && (
-        <Link href={`/jobs/${job.id}`} className="ml-2 text-gray-200 hover:text-gray-100 inline-block">
+        <Link href={`/jobs/${job.id}`} className="inline-block text-gray-200 hover:text-gray-100">
           <Eye />
         </Link>
       )}
       {canEdit && (
-        <Link href={`/jobs/new?id=${job.id}`} className="ml-2 hover:text-gray-100 inline-block">
+        <Link href={`/jobs/new?id=${job.id}`} className="inline-block hover:text-gray-100">
           <Pen />
         </Link>
       )}
@@ -113,13 +113,13 @@ export default function JobActionBar({
             },
           });
         }}
-        className={`ml-2 opacity-100`}
+        className={`opacity-100`}
       >
         <Trash2 />
       </Button>
-      <div className="border-r border-1 border-gray-700 ml-2 inline"></div>
+      <div className="hidden h-5 border-r border-gray-700 sm:inline-block"></div>
       <Menu>
-        <MenuButton className={'ml-2'}>
+        <MenuButton className={'inline-flex'}>
           <Cog />
         </MenuButton>
         <MenuItems anchor="bottom" className="bg-gray-900 border border-gray-700 rounded shadow-lg w-48 px-2 py-2 mt-4">

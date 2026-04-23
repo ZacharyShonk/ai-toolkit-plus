@@ -50,22 +50,22 @@ const GpuMonitor: React.FC = () => {
       case 1:
         return 'grid-cols-1';
       case 2:
-        return 'grid-cols-2';
+        return 'grid-cols-1 md:grid-cols-2';
       case 3:
-        return 'grid-cols-3';
+        return 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3';
       case 4:
-        return 'grid-cols-4';
+        return 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4';
       case 5:
       case 6:
-        return 'grid-cols-3';
+        return 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3';
       case 7:
       case 8:
-        return 'grid-cols-4';
+        return 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4';
       case 9:
       case 10:
-        return 'grid-cols-5';
+        return 'grid-cols-1 md:grid-cols-2 xl:grid-cols-5';
       default:
-        return 'grid-cols-3';
+        return 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3';
     }
   };
 
@@ -129,7 +129,7 @@ const GpuMonitor: React.FC = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-2">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-md">GPU Monitor</h1>
         <div className="text-xs text-gray-500">Last updated: {lastUpdated?.toLocaleTimeString()}</div>
       </div>

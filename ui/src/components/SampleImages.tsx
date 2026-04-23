@@ -146,96 +146,6 @@ export default function SampleImages({ job }: SampleImagesProps) {
     );
   }, [status, sampleImages.length]);
 
-  // Use direct Tailwind class without string interpolation
-  // This way Tailwind can properly generate the class
-  // I hate this, but it's the only way to make it work
-  const gridColsClass = useMemo(() => {
-    const cols = Math.min(numSamples, 40);
-
-    switch (cols) {
-      case 1:
-      case 2:
-      case 3:
-        return 'grid-cols-3';
-      case 4:
-        return 'grid-cols-4';
-      case 5:
-        return 'grid-cols-5';
-      case 6:
-        return 'grid-cols-6';
-      case 7:
-        return 'grid-cols-7';
-      case 8:
-        return 'grid-cols-8';
-      case 9:
-        return 'grid-cols-9';
-      case 10:
-        return 'grid-cols-10';
-      case 11:
-        return 'grid-cols-11';
-      case 12:
-        return 'grid-cols-12';
-      case 13:
-        return 'grid-cols-13';
-      case 14:
-        return 'grid-cols-14';
-      case 15:
-        return 'grid-cols-15';
-      case 16:
-        return 'grid-cols-16';
-      case 17:
-        return 'grid-cols-17';
-      case 18:
-        return 'grid-cols-18';
-      case 19:
-        return 'grid-cols-19';
-      case 20:
-        return 'grid-cols-20';
-      case 21:
-        return 'grid-cols-21';
-      case 22:
-        return 'grid-cols-22';
-      case 23:
-        return 'grid-cols-23';
-      case 24:
-        return 'grid-cols-24';
-      case 25:
-        return 'grid-cols-25';
-      case 26:
-        return 'grid-cols-26';
-      case 27:
-        return 'grid-cols-27';
-      case 28:
-        return 'grid-cols-28';
-      case 29:
-        return 'grid-cols-29';
-      case 30:
-        return 'grid-cols-30';
-      case 31:
-        return 'grid-cols-31';
-      case 32:
-        return 'grid-cols-32';
-      case 33:
-        return 'grid-cols-33';
-      case 34:
-        return 'grid-cols-34';
-      case 35:
-        return 'grid-cols-35';
-      case 36:
-        return 'grid-cols-36';
-      case 37:
-        return 'grid-cols-37';
-      case 38:
-        return 'grid-cols-38';
-      case 39:
-        return 'grid-cols-39';
-      case 40:
-        return 'grid-cols-40';
-      default:
-        return 'grid-cols-3';
-    }
-  }, [numSamples]);
-
   const sampleConfig = useMemo(() => {
     if (job?.job_config) {
       const jobConfig = JSON.parse(job.job_config) as JobConfig;
@@ -255,26 +165,14 @@ export default function SampleImages({ job }: SampleImagesProps) {
   }, [status, sampleImages.length]);
 
   return (
-    <div ref={containerRef} className="absolute top-[80px] left-0 right-0 bottom-0 overflow-y-auto">
+    <div ref={containerRef} className="relative overflow-y-auto">
       <div className="pb-4">
         {PageInfoContent}
         {sampleImages && (
-          <div className={`grid ${gridColsClass} gap-1`}>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {sampleImages.map((sample: string, idx: number) => {
-              // Compute current group (groups are size = numSamples)
-              const groupIndex = Math.floor(idx / numSamples);
-              const groupStart = groupIndex * numSamples;
-              const groupEnd = Math.min(groupStart + numSamples, sampleImages.length);
-              const groupSize = groupEnd - groupStart;
-              const isEndOfGroup = idx === groupEnd - 1;
-
-              // Only enforce a MIN of 3 when the group's planned width is < 3
-              const MIN_COLS = 3;
-              const shouldPad = numSamples < MIN_COLS && groupSize < MIN_COLS;
-              const padsNeeded = shouldPad ? MIN_COLS - groupSize : 0;
-
               return (
-                <div key={sample} className="contents">
+                <div key={sample}>
                   <SampleImageCard
                     imageUrl={sample}
                     numSamples={numSamples}
@@ -283,12 +181,6 @@ export default function SampleImages({ job }: SampleImagesProps) {
                     onClick={() => setSelectedSamplePath(sample)}
                     observerRoot={containerRef.current}
                   />
-
-                  {isEndOfGroup &&
-                    padsNeeded > 0 &&
-                    Array.from({ length: padsNeeded }).map((_, i) => (
-                      <div key={`pad-${groupIndex}-${i}`} className="invisible" />
-                    ))}
                 </div>
               );
             })}
@@ -304,14 +196,14 @@ export default function SampleImages({ job }: SampleImagesProps) {
         refreshSampleImages={refreshSampleImages}
       />
       <div
-        className="fixed top-20 mt-4 right-6 w-10 h-10 rounded-full bg-gray-900 shadow-lg flex items-center justify-center text-white opacity-80 hover:opacity-100 cursor-pointer"
+        className="fixed right-4 top-24 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-white opacity-80 shadow-lg hover:opacity-100"
         onClick={scrollToTop}
         title="Scroll to Top"
       >
         <FaCaretUp className="text-gray-500 dark:text-gray-400" />
       </div>
       <div
-        className="fixed bottom-5 right-6 w-10 h-10 rounded-full bg-gray-900 shadow-lg flex items-center justify-center text-white opacity-80 hover:opacity-100 cursor-pointer"
+        className="fixed bottom-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-white opacity-80 shadow-lg hover:opacity-100"
         onClick={scrollToBottom}
         title="Scroll to Bottom"
       >
