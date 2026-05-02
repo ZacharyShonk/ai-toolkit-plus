@@ -273,6 +273,7 @@ export default function TrainingForm() {
         onChange={handleFileSelected}
       />
 
+      {showAdvancedView ? (
         <div className="min-h-0 flex-1 overflow-auto px-3 pb-3 sm:px-4 sm:pb-4">
           <AdvancedConfigEditor
             config={jobConfig}
