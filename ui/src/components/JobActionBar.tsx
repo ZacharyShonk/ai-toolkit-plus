@@ -122,7 +122,10 @@ export default function JobActionBar({
         <MenuButton className={'inline-flex'}>
           <Cog />
         </MenuButton>
-        <MenuItems anchor="bottom" className="bg-gray-900 border border-gray-700 rounded shadow-lg w-48 px-2 py-2 mt-4">
+        <MenuItems
+          anchor="bottom"
+          className="z-50 mt-4 w-48 rounded border border-gray-700 bg-gray-900 px-2 py-2 text-gray-200 shadow-lg"
+        >
           {job.job_type === 'train' && (
             <MenuItem>
               <Link

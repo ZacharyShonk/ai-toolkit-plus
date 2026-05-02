@@ -274,7 +274,7 @@ export default function TrainingForm() {
       />
 
       {showAdvancedView ? (
-        <div className="min-h-0 flex-1 overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
+        <div className="min-h-0 flex-1 overflow-auto px-3 pb-3 sm:px-4 sm:pb-4">
           <AdvancedJob
             jobConfig={jobConfig}
             setJobConfig={setJobConfig}

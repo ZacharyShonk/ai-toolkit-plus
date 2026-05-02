@@ -154,6 +154,28 @@ Run detached:
 podman compose up -d
 ```
 
+Update an existing container after changing code or pulling new commits:
+
+```bash
+podman compose build ai-toolkit
+podman compose up -d --force-recreate ai-toolkit
+```
+
+Do not use `podman start <container-id>` for updates. That only starts the existing container again and keeps the old image. Use `podman compose up -d --force-recreate ai-toolkit` so Podman replaces the container with one created from the current `ai-toolkit-local:latest` image.
+
+Verify the running container is using the latest image:
+
+```bash
+podman image inspect --format '{{.Id}}' localhost/ai-toolkit-local:latest
+podman inspect --format '{{.Image}}' ai-toolkit-plus_ai-toolkit_1
+```
+
+The two IDs should match. If they do not match, recreate the service again:
+
+```bash
+podman compose up -d --force-recreate ai-toolkit
+```
+
 Watch logs:
 
 ```bash
@@ -169,8 +191,8 @@ podman compose down
 Force a clean rebuild:
 
 ```bash
-podman compose build --no-cache
-podman compose up
+podman compose build --no-cache ai-toolkit
+podman compose up -d --force-recreate ai-toolkit
 ```
 
 Quick checks:
@@ -191,6 +213,15 @@ mkdir -p state datasets output config ~/.cache/huggingface/hub
 docker compose build
 docker compose up
 ```
+
+Update an existing Docker container after changing code or pulling new commits:
+
+```bash
+docker compose build ai-toolkit
+docker compose up -d --force-recreate ai-toolkit
+```
+
+As with Podman, `docker start <container-id>` only restarts the old container. It does not replace it with the newly built image.
 
 ## Securing the UI
 

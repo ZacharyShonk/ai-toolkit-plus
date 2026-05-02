@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     image: ai-toolkit-local:latest
+    shm_size: '30gb'
     restart: unless-stopped
     ports:
       - "8675:8675"

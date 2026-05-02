@@ -94,7 +94,7 @@ export default function JobPage({ params }: { params: { jobID: string } }) {
           />
         )}
       </TopBar>
-      <div className="sticky top-14 z-20 border-b border-gray-800 bg-gray-800/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-gray-800/85 sm:px-4">
+      <div className="z-20 border-b border-gray-800 bg-gray-800/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-gray-800/85 sm:px-4">
         <div className="flex flex-wrap items-center gap-2 overflow-x-auto">
           {pages.map(page => {
             if (page.jobTypes && !page.jobTypes.includes(jobType)) {

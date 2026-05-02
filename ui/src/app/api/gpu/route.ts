@@ -157,15 +157,12 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Error fetching NVIDIA GPU stats:', error);
-    return NextResponse.json(
-      {
-        hasNvidiaSmi: false,
-        isMac: false,
-        gpus: [],
-        error: `Failed to fetch GPU stats: ${error instanceof Error ? error.message : String(error)}`,
-      },
-      { status: 500 },
-    );
+    return NextResponse.json({
+      hasNvidiaSmi: false,
+      isMac: false,
+      gpus: [],
+      error: `Failed to fetch GPU stats: ${error instanceof Error ? error.message : String(error)}`,
+    });
   }
 }
 
@@ -248,4 +245,3 @@ async function getGpuStats(isWindows: boolean) {
 
   return gpus;
 }
-

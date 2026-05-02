@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef, useEffect } from 'react';
+import { useMemo, useState, useRef, useEffect, type CSSProperties } from 'react';
 import useSampleImages from '@/hooks/useSampleImages';
 import SampleImageCard from './SampleImageCard';
 import { Job } from '@prisma/client';
@@ -146,6 +146,11 @@ export default function SampleImages({ job }: SampleImagesProps) {
     );
   }, [status, sampleImages.length]);
 
+  const gridStyle = useMemo(
+    () => ({ '--sample-cols': Math.min(numSamples, 40) }) as CSSProperties,
+    [numSamples],
+  );
+
   const sampleConfig = useMemo(() => {
     if (job?.job_config) {
       const jobConfig = JSON.parse(job.job_config) as JobConfig;
@@ -165,14 +170,26 @@ export default function SampleImages({ job }: SampleImagesProps) {
   }, [status, sampleImages.length]);
 
   return (
-    <div ref={containerRef} className="relative overflow-y-auto">
+    <div ref={containerRef} className="relative min-h-0 flex-1 overflow-y-auto">
       <div className="pb-4">
         {PageInfoContent}
         {sampleImages && (
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          <div
+            className="grid grid-cols-1 gap-1 md:[grid-template-columns:repeat(var(--sample-cols),minmax(0,1fr))]"
+            style={gridStyle}
+          >
             {sampleImages.map((sample: string, idx: number) => {
+              const groupIndex = Math.floor(idx / numSamples);
+              const groupStart = groupIndex * numSamples;
+              const groupEnd = Math.min(groupStart + numSamples, sampleImages.length);
+              const groupSize = groupEnd - groupStart;
+              const isEndOfGroup = idx === groupEnd - 1;
+              const minCols = 3;
+              const shouldPad = numSamples < minCols && groupSize < minCols;
+              const padsNeeded = shouldPad ? minCols - groupSize : 0;
+
               return (
-                <div key={sample}>
+                <div key={sample} className="contents">
                   <SampleImageCard
                     imageUrl={sample}
                     numSamples={numSamples}
@@ -181,6 +198,12 @@ export default function SampleImages({ job }: SampleImagesProps) {
                     onClick={() => setSelectedSamplePath(sample)}
                     observerRoot={containerRef.current}
                   />
+
+                  {isEndOfGroup &&
+                    padsNeeded > 0 &&
+                    Array.from({ length: padsNeeded }).map((_, i) => (
+                      <div key={`pad-${groupIndex}-${i}`} className="hidden md:block md:invisible" />
+                    ))}
                 </div>
               );
             })}
