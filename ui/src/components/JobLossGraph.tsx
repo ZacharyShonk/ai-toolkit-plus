@@ -124,6 +124,16 @@ export default function JobLossGraph({ job }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const chartWrapperRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    let maxPoints = 0;
+    for (const key of activeKeys) {
+      const points = series[key] ?? [];
+      if (points.length > maxPoints) maxPoints = points.length;
+    }
+
+    setPlotStride(Math.max(1, Math.ceil(maxPoints / 3000)));
+  }, [series, activeKeys]);
+
   const perSeries = useMemo(() => {
     // Build per-series processed point arrays (raw + smoothed + fullSmooth), then merge by step for charting.
     const stride = Math.max(1, plotStride | 0);
@@ -282,6 +292,7 @@ export default function JobLossGraph({ job }: Props) {
 
   const hasData = chartData.length > 1;
   const isZoomed = zoomLeft != null && zoomRight != null;
+  const plotStrideMax = Math.max(20, plotStride);
 
   const yDomain = useMemo((): [number | 'auto', number | 'auto'] => {
     if (!clipOutliers || chartData.length < 10) return ['auto', 'auto'];
@@ -440,7 +451,6 @@ export default function JobLossGraph({ job }: Props) {
                     tooltipType="none"
                   />
                 ))}
-
               </LineChart>
             </ResponsiveContainer>
             </>
@@ -513,7 +523,7 @@ export default function JobLossGraph({ job }: Props) {
             <input
               type="range"
               min={1}
-              max={20}
+              max={plotStrideMax}
               value={plotStride}
               onChange={e => setPlotStride(Number(e.target.value))}
               className="w-full accent-blue-500"
