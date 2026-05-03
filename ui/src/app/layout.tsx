@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <AuthWrapper authRequired={authRequired}>
             <AppShell>
-              <div className="flex min-h-screen flex-1 flex-col overflow-hidden">
+              <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                 <Suspense>{children}</Suspense>
               </div>
             </AppShell>

@@ -30,8 +30,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <AppShellContext.Provider value={contextValue}>
-      <div className="flex min-h-screen bg-gray-950 text-gray-100">
-        <div className="hidden lg:flex lg:w-60 lg:flex-shrink-0 lg:border-r lg:border-gray-800">
+      <div className="flex h-screen min-h-0 overflow-hidden bg-gray-950 text-gray-100">
+        <div className="hidden lg:flex lg:h-screen lg:w-60 lg:flex-shrink-0 lg:border-r lg:border-gray-800">
           <Sidebar />
         </div>
 
@@ -61,7 +61,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <Sidebar onNavigate={() => setIsMobileNavOpen(false)} />
         </div>
 
-        <main className="relative flex min-w-0 flex-1 flex-col bg-gray-950 text-gray-100">{children}</main>
+        <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-gray-950 text-gray-100">
+          {children}
+        </main>
       </div>
     </AppShellContext.Provider>
   );
