@@ -214,6 +214,8 @@ docker compose build
 docker compose up
 ```
 
+The compose file defaults `/dev/shm` to `999gb` for large training jobs. Override it on smaller systems with `SHM_SIZE`, for example `SHM_SIZE=64gb docker compose up`.
+
 Update an existing Docker container after changing code or pulling new commits:
 
 ```bash
