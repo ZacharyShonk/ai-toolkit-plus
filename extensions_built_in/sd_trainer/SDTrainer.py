@@ -1241,6 +1241,47 @@ class SDTrainer(BaseSDTrainProcess):
             batch=batch,
             **kwargs
         )
+
+    def get_cached_prompt_embeds_with_caption_dropout(
+        self,
+        batch: DataLoaderBatchDTO,
+        dtype: torch.dtype,
+    ):
+        has_caption_dropout = any(
+            file_item.dataset_config.caption_dropout_rate > 0
+            for file_item in batch.file_items
+        )
+        if not has_caption_dropout:
+            return batch.prompt_embeds.clone().detach().to(
+                self.device_torch, dtype=dtype
+            )
+
+        base_prompt_embeds = None
+        for file_item in batch.file_items:
+            if file_item.prompt_embeds is not None:
+                base_prompt_embeds = file_item.prompt_embeds
+                break
+        if base_prompt_embeds is None:
+            return batch.prompt_embeds.clone().detach().to(
+                self.device_torch, dtype=dtype
+            )
+
+        prompt_embeds_list = []
+        for file_item in batch.file_items:
+            caption_dropout_rate = file_item.dataset_config.caption_dropout_rate
+            if caption_dropout_rate > 0 and random.random() < caption_dropout_rate:
+                prompt_embeds_list.append(self.cached_blank_embeds.clone().detach())
+            elif file_item.prompt_embeds is not None:
+                prompt_embeds_list.append(file_item.prompt_embeds)
+            else:
+                prompt_embeds_list.append(base_prompt_embeds)
+
+        padding_side = batch.file_items[0].te_padding_side
+        conditional_embeds = concat_prompt_embeds(
+            prompt_embeds_list,
+            padding_side=padding_side,
+        )
+        return conditional_embeds.clone().detach().to(self.device_torch, dtype=dtype)
     
 
     def train_single_accumulation(self, batch: DataLoaderBatchDTO):
@@ -1539,8 +1580,9 @@ class SDTrainer(BaseSDTrainProcess):
                         with torch.set_grad_enabled(False):
                             if batch.prompt_embeds is not None:
                                 # use the cached embeds
-                                conditional_embeds = batch.prompt_embeds.clone().detach().to(
-                                    self.device_torch, dtype=dtype
+                                conditional_embeds = self.get_cached_prompt_embeds_with_caption_dropout(
+                                    batch,
+                                    dtype,
                                 )
                             else:
                                 embeds_to_use = self.cached_blank_embeds.clone().detach().to(
