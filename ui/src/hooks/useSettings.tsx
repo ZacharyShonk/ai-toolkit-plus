@@ -7,6 +7,7 @@ export interface Settings {
   HF_TOKEN: string;
   TRAINING_FOLDER: string;
   DATASETS_FOLDER: string;
+  SAVE_FINAL_WITH_STEP: boolean;
 }
 
 export default function useSettings() {
@@ -14,6 +15,7 @@ export default function useSettings() {
     HF_TOKEN: '',
     TRAINING_FOLDER: '',
     DATASETS_FOLDER: '',
+    SAVE_FINAL_WITH_STEP: false,
   });
   const [isSettingsLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -26,6 +28,7 @@ export default function useSettings() {
           HF_TOKEN: data.HF_TOKEN || '',
           TRAINING_FOLDER: data.TRAINING_FOLDER || '',
           DATASETS_FOLDER: data.DATASETS_FOLDER || '',
+          SAVE_FINAL_WITH_STEP: data.SAVE_FINAL_WITH_STEP === true || data.SAVE_FINAL_WITH_STEP === 'true',
         });
         setIsLoaded(true);
       })

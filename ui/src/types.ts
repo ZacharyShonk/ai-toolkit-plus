@@ -77,6 +77,7 @@ export interface SaveConfig {
   dtype: string;
   save_every: number;
   max_step_saves_to_keep: number;
+  save_final_with_step?: boolean;
   save_format: string;
   push_to_hub: boolean;
 }
@@ -270,7 +271,7 @@ export interface CaptionProcessConfig {
     max_res?: number;
     max_new_tokens?: number;
     fixed_caption?: string;
-  }
+  };
 }
 
 export interface CaptionConfigObject {

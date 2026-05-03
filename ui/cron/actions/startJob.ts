@@ -3,7 +3,7 @@ import { Job } from '@prisma/client';
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
-import { TOOLKIT_ROOT, getTrainingFolder, getHFToken } from '../paths';
+import { TOOLKIT_ROOT, getTrainingFolder, getHFToken, getSaveFinalWithStep } from '../paths';
 const isWindows = process.platform === 'win32';
 
 const startAndWatchJob = (job: Job) => {
@@ -48,6 +48,12 @@ const startAndWatchJob = (job: Job) => {
     // update the config dataset path
     const jobConfig = JSON.parse(job.job_config);
     jobConfig.config.process[0].sqlite_db_path = path.join(TOOLKIT_ROOT, 'aitk_db.db');
+    if (!jobConfig.config.process[0].save) {
+      jobConfig.config.process[0].save = {};
+    }
+    if (!Object.prototype.hasOwnProperty.call(jobConfig.config.process[0].save, 'save_final_with_step')) {
+      jobConfig.config.process[0].save.save_final_with_step = await getSaveFinalWithStep();
+    }
 
     // write the config file
     fs.writeFileSync(configPath, JSON.stringify(jobConfig, null, 2));

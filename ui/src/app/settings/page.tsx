@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useSettings from '@/hooks/useSettings';
 import { TopBar, MainContent } from '@/components/layout';
 import { apiClient } from '@/utils/api';
+import { Checkbox } from '@/components/formInputs';
 
 export default function Settings() {
   const { settings, setSettings } = useSettings();
@@ -29,6 +30,10 @@ export default function Settings() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setSettings(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckboxChange = (name: string, value: boolean) => {
     setSettings(prev => ({ ...prev, [name]: value }));
   };
 
@@ -106,6 +111,19 @@ export default function Settings() {
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-transparent"
                     placeholder="Enter datasets folder path"
                   />
+                </div>
+
+                <div className="pt-2">
+                  <Checkbox
+                    label="Save final model with step number"
+                    checked={settings.SAVE_FINAL_WITH_STEP}
+                    onChange={value => handleCheckboxChange('SAVE_FINAL_WITH_STEP', value)}
+                  />
+                  <div className="text-gray-500 text-sm ml-14 mt-1">
+                    Adds the final training step to the final LoRA filename, for example{' '}
+                    <code>my_lora_000003000.safetensors</code>. Individual jobs can override this in their Save
+                    settings.
+                  </div>
                 </div>
               </div>
             </div>

@@ -536,6 +536,28 @@ export default function SimpleJob({
               min={1}
               required
             />
+            <SelectInput
+              label="Final Filename Step"
+              value={
+                jobConfig.config.process[0].save.save_final_with_step === undefined
+                  ? 'inherit'
+                  : jobConfig.config.process[0].save.save_final_with_step
+                    ? 'true'
+                    : 'false'
+              }
+              onChange={value => {
+                if (value === 'inherit') {
+                  setJobConfig(undefined, 'config.process[0].save.save_final_with_step');
+                  return;
+                }
+                setJobConfig(value === 'true', 'config.process[0].save.save_final_with_step');
+              }}
+              options={[
+                { value: 'inherit', label: 'Use app setting' },
+                { value: 'false', label: 'Do not include step' },
+                { value: 'true', label: 'Include step' },
+              ]}
+            />
           </Card>
         </div>
         <div>

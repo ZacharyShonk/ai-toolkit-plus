@@ -35,3 +35,13 @@ export const getHFToken = async () => {
   }
   return token;
 };
+
+export const getSaveFinalWithStep = async () => {
+  const key = 'SAVE_FINAL_WITH_STEP';
+  let row = await prisma.settings.findFirst({
+    where: {
+      key: key,
+    },
+  });
+  return row?.value === 'true';
+};
