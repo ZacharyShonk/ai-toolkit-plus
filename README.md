@@ -2,6 +2,20 @@
 
 AI Toolkit is an easy to use all in one training suite for diffusion models. I try to support all the latest models on consumer grade hardware. Image and video models. It can be run as a GUI or CLI. It is designed to be easy to use but still have every feature imaginable. Free and open source.
 
+### Improvements Over Upstream
+
+- Local Docker and Podman builds from this checkout instead of cloning upstream inside the image.
+- Persistent host-mounted runtime state for `datasets/`, `output/`, `config/`, and the SQLite database at `state/aitk_db.db`.
+- Safer container startup and update flow, including first-run database setup, symlink migration safety, `AI_TOOLKIT_AUTH` examples, and documentation for recreating containers after rebuilds.
+- Larger default Docker shared memory for large training jobs.
+- Mobile UI improvements for phones while preserving the desktop layout.
+- Desktop sidebar scrolling fixes so long pages scroll in the main content area.
+- Job page menu and scrolling fixes, plus graceful handling for GPU stat failures.
+- Final step save setting to control whether final LoRA filenames include the training step.
+- Loss graph auto-stride adjustment to keep plotted loss data manageable.
+- Cached caption dropout support.
+- Current Next.js config cleanup by removing deprecated settings.
+
 
 
 ## Supported Models
@@ -63,8 +77,8 @@ Requirements:
 
 Linux:
 ```bash
-git clone https://github.com/ostris/ai-toolkit.git
-cd ai-toolkit
+git clone https://github.com/ZacharyShonk/ai-toolkit-plus.git
+cd ai-toolkit-plus
 python3 -m venv venv
 source venv/bin/activate
 # install torch first
@@ -80,8 +94,8 @@ Windows:
 If you are having issues with Windows. I recommend using the easy install script at [https://github.com/Tavris1/AI-Toolkit-Easy-Install](https://github.com/Tavris1/AI-Toolkit-Easy-Install)
 
 ```bash
-git clone https://github.com/ostris/ai-toolkit.git
-cd ai-toolkit
+git clone https://github.com/ZacharyShonk/ai-toolkit-plus.git
+cd ai-toolkit-plus
 python -m venv venv
 .\venv\Scripts\activate
 pip install --no-cache-dir torch==2.9.1 torchvision==0.24.1 torchaudio==2.9.1 --index-url https://download.pytorch.org/whl/cu128
@@ -96,8 +110,8 @@ locates at `./run_mac.zsh` that will install the dependencies locally and run th
 do the following:
 
 ```bash
-git clone https://github.com/ostris/ai-toolkit.git
-cd ai-toolkit
+git clone https://github.com/ZacharyShonk/ai-toolkit-plus.git
+cd ai-toolkit-plus
 chmod +x run_mac.zsh
 ./run_mac.zsh
 ```
